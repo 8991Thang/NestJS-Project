@@ -2,24 +2,31 @@ import { Get } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { Post } from '@nestjs/common';
 import { Delete } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user-decorator';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { ITask } from './task.enum';
 import { TasksService } from './tasks.service';
+import { User } from '../auth/user.entity';
 
 @Controller('tasks')
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
-  // @Get()
-  // getAllTask(@Query() getTaskFilter: GetTaskFilter): ITask[] {
-  //   console.log('getTaskFilter : ', getTaskFilter);
-  //   return this.tasksService.getALLTask(getTaskFilter);
-  // }
+  @Get()
+  getAllTask(): Promise<ITask[]> {
+    return this.tasksService.getALLTask();
+  }
   @Post()
-  createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<ITask> {
-    return this.tasksService.createTask(createTaskDTO);
+  createTask(
+    @Body() createTaskDTO: CreateTaskDTO,
+    @GetUser() user: User,
+  ): Promise<ITask> {
+    return this.tasksService.createTask(createTaskDTO, user);
   }
 
   @Get('/:id')

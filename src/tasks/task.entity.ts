@@ -1,8 +1,9 @@
+import { User } from 'src/auth/user.entity';
 import { SharePropEntity } from 'src/helper/sharePropEntity.helper';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from './task.enum';
 
-@Entity()
+@Entity('task-db')
 export class Task extends SharePropEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -15,4 +16,7 @@ export class Task extends SharePropEntity {
 
   @Column()
   status: TaskStatus;
+
+  @ManyToOne(() => User, (user: User) => user.tasks)
+  user: User;
 }

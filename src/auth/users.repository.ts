@@ -1,12 +1,11 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { User } from './user.entity';
-import { AuthDto } from './dto/auth.dto';
-import { TUser } from './user.type';
-import _ from 'lodash';
 import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
+import { AuthDto } from './dto/auth.dto';
+import { User } from './user.entity';
+import { TUser } from './user.type';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async createNewUser(authDto: AuthDto): Promise<TUser> {

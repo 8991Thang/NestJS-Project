@@ -13,6 +13,17 @@ export class TasksService {
     private tasksRepository: TasksRepository,
   ) {}
 
+  async getALLTask(): Promise<ITask[]> {
+    const allTask = await this.tasksRepository.find({
+      relations: ['user'],
+      select: ['user'],
+      join: {
+        alias: 'user',
+        innerJoinAndSelect: { ugg: 'user', u: 'user' },
+      },
+    });
+    return allTask;
+  }
   async getTaskById(idTask: string): Promise<ITask> {
     const foundTask = await this.tasksRepository.findOne(idTask);
     if (!foundTask) {
@@ -20,12 +31,13 @@ export class TasksService {
     }
     return foundTask;
   }
-  async createTask(createTaskDTO: CreateTaskDTO): Promise<ITask> {
+  async createTask(createTaskDTO: CreateTaskDTO, user): Promise<ITask> {
     const { title, descriptions } = createTaskDTO;
     const newTask = this.tasksRepository.create({
       title,
       descriptions,
       status: TaskStatus.OPEN,
+      user,
     });
     await this.tasksRepository.save(newTask);
     return newTask;

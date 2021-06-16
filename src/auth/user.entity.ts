@@ -4,9 +4,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { genSalt, hash, compare } from 'bcrypt';
+import { Task } from 'src/tasks/task.entity';
 
 @Entity()
 export class User extends SharePropEntity {
@@ -27,4 +29,7 @@ export class User extends SharePropEntity {
     const salt = await genSalt();
     this.password = await hash(this.password, salt);
   }
+
+  @OneToMany(() => Task, (task: Task) => task.user)
+  tasks: Task[];
 }
