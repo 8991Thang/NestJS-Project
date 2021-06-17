@@ -1,4 +1,6 @@
+import { genSalt, hash } from 'bcrypt';
 import { SharePropEntity } from 'src/helper/sharePropEntity.helper';
+import { Task } from 'src/tasks/task.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -7,8 +9,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { genSalt, hash, compare } from 'bcrypt';
-import { Task } from 'src/tasks/task.entity';
 
 @Entity()
 export class User extends SharePropEntity {

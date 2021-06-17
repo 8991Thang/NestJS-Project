@@ -11,7 +11,9 @@ import { CreateTaskDTO } from './dto/create-task.dto';
 import { ITask } from './task.enum';
 import { TasksService } from './tasks.service';
 import { User } from '../auth/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tasks')
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
